@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
         updateWallpaper();
 
+        gridView.setAdapter(new ImageAdapter(this));
+
     }
 
 
