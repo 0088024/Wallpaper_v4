@@ -36,7 +36,7 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return array_idSfondi[position];
     }
 
 
@@ -46,7 +46,7 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView;
         if(convertView == null){
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(85, 85));
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(200, 200));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8,8,8,8);
         }
