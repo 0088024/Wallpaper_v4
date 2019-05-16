@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public final int REQUEST_ID = 100;
     private int STATO_PERMISSION = 0;
+    private int altezza,larghezza;
 
 
     @Override
@@ -81,10 +82,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 ActivityCompat.OnRequestPermissionsResultCallback and the results of permission
                 requests will be delivered to its
                 onRequestPermissionsResult(int, String[], int[]) method.*/
-                Log.d("Wallpaper :", "requestPermission()");
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_ID);
+                //Log.d("Wallpaper :", "requestPermission()");
+                //ActivityCompat.requestPermissions(this,
+                        //new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        //REQUEST_ID);
             }
         }
 
@@ -124,8 +125,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         supported in the current user, or if the calling app is not permitted to access the system
         wallpaper.*/
         drawable = wallpaperManager.getDrawable();
-        int altezza = wallpaperManager.getDesiredMinimumHeight();
-        int larghezza = wallpaperManager.getDesiredMinimumWidth();
+        altezza = wallpaperManager.getDesiredMinimumHeight();
+        larghezza = wallpaperManager.getDesiredMinimumWidth();
         Log.d("Wallpaper : ", "Desiderata minima altezza/larghezza = " +
                 String.valueOf(altezza) + String.valueOf(larghezza)) ;
 
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         /*imposta il wallpaper corrente come contenuto di questa ImageView*/
         imageView.setImageDrawable(drawable);
+        
 
 
     }
@@ -178,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         imageView.setImageResource((int)imageAdapter.getItemId(position));
 
+
         /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
          * verrà avvisato che non lo può fare. Quindi continuerà a vedere solo e soltanto
          * l'ultimo sfondo impostato precedentemente */
@@ -185,9 +188,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             /* Allora informa l'utente che non può cambiare lo sfondo */
             DialogNoPermission mydialog = new DialogNoPermission();
             mydialog.show(getSupportFragmentManager(), "mydialog");
-        }else { /* Puoi impostare lo sfondo selezionato */
+        }else {
+            /* Puoi impostare lo sfondo selezionato */
             try {
                 wallpaperManager.setResource((int) imageAdapter.getItemId(position));
+
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d("Wallpaper : ", "Errore in WallpaperManager.setResource()");
