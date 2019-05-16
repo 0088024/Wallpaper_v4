@@ -26,9 +26,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Drawable drawable;
     private ImageAdapter imageAdapter;
 
-    // codice di ritorno in caseo
-    public static int MY_PERMISSIONS_REQUEST_CAMERA=100;
-
     public final int REQUEST_ID = 100;
 
 
@@ -74,18 +71,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 requested in your manifest, they should not be granted to your app, and they should
                 have protection level #PROTECTION_DANGEROUS dangerous
                 If your app does not have the requested permissions the user will be presented with
-                 UI for accepting them. After the user has accepted or rejected the requested
-                 permissions you will receive a callback reporting whether the permissions were
-                 granted or not. Your activity has to implement
-                 ActivityCompat.OnRequestPermissionsResultCallback and the results of permission
-                 requests will be delivered to its
-                 onRequestPermissionsResult(int, String[], int[]) method.*/
+                UI for accepting them. After the user has accepted or rejected the requested
+                permissions you will receive a callback reporting whether the permissions were
+                granted or not. Your activity has to implement
+                ActivityCompat.OnRequestPermissionsResultCallback and the results of permission
+                requests will be delivered to its
+                onRequestPermissionsResult(int, String[], int[]) method.*/
                 Log.d("Wallpaper :", "requestPermission()");
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_ID);
             }
         }
+
+        else Log.d("Wallpaper", "Permesso già concesso");
 
         /*Tale codice verrà eseguito solo se ci troviamo in Android 6: in tutte le altre
         versioni la permission verrà considerata concessa.*/
