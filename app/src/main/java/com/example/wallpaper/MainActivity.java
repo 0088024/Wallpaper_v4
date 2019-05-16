@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ImageAdapter imageAdapter;
 
     public final int REQUEST_ID = 100;
+    private int STATO_PERMISSION = 0;
 
 
     @Override
@@ -150,12 +151,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     /*permission accettata: possiamo attivare il codice*/
                     Log.d("Wallpaper :", "Permission accettata");
-
                     updateWallpaper();
 
                 }
                 /*permission negata: disattiviamo i servizi che ne hanno bisogno*/
                 else {
+                    STATO_PERMISSION=-1;
                     Log.d("Wallpaper :", "Permission negata");
                 }
             }
@@ -173,12 +174,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         imageView.setImageResource((int)imageAdapter.getItemId(position));
 
-        try {
-            wallpaperManager.setResource((int)imageAdapter.getItemId(position));
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("Wallpaper : ", "Errore in WallpaperManager.setResource()");
+        /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi */
+        if (STATO_PERMISSION!=0){
+            /* Allora informa l'utente che non può cambiare lo sfondo */
+            DialogNoPermission mydialog = new DialogNoPermission();
+            mydialog.show(getSupportFragmentManager(), "mydialog");
+        }else {
+            try {
+                wallpaperManager.setResource((int) imageAdapter.getItemId(position));
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d("Wallpaper : ", "Errore in WallpaperManager.setResource()");
 
+            }
         }
     }
 
