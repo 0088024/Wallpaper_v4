@@ -179,7 +179,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         imageView.setImageResource((int)imageAdapter.getItemId(position));
 
         /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
-         * verrà avvisato che non lo può fare.*/
+         * verrà avvisato che non lo può fare. Quindi continuerà a vedere solo e soltanto
+         * l'ultimo sfondo impostato precedentemente */
         if (STATO_PERMISSION!=0){
             /* Allora informa l'utente che non può cambiare lo sfondo */
             DialogNoPermission mydialog = new DialogNoPermission();
