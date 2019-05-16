@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     /*permission accettata: possiamo attivare il codice*/
                     /* Dopo la prima volta che viene accettata non verrà più mostrata la finestra
-                    all'utente a meno che non rimuove a mano la permission dalle impostazioni dell'emulatore o
+                    all'utente a meno che non si rimuove a mano la permission dalle impostazioni dell'emulatore o
                     del dispositivo mobile.
                      */
                     Log.d("Wallpaper :", "Permission accettata");
