@@ -63,6 +63,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     /*mostriamo una finestra di dialogo che spiega perchè l'app ha bisogno della
                     permission e successivamente ne chiediamo l'accettazione*/
                     Log.d("Wallpaper :", "shouldShowRequestPermissionRationale() == true");
+                Log.d("Wallpaper :", "requestPermission()");
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_ID);
 
             }
             /*altrimenti viene proposto all'utente di accettare la permission*/
@@ -120,6 +124,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         supported in the current user, or if the calling app is not permitted to access the system
         wallpaper.*/
         drawable = wallpaperManager.getDrawable();
+        int altezza = wallpaperManager.getDesiredMinimumHeight();
+        int larghezza = wallpaperManager.getDesiredMinimumWidth();
+        Log.d("Wallpaper : ", "Desiderata minima altezza/larghezza = " +
+                String.valueOf(altezza) + String.valueOf(larghezza)) ;
+
         if(drawable == null) {
             Log.d("Wallpaper : ", "Drawable = null");
 
