@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-
+    private int ID_RICHIESTA_PERMISSION = 0;
     private GridView gridView;
     private ImageView imageView;
     private WallpaperManager wallpaperManager;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void updateWallpaper() {
 
+
+
         /*qui l'indianino metteva getApllicationContext() invece che this*/
         /*getInstance() recupera 1 WallpaperManager associato con il dato contesto*/
         wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
@@ -59,17 +62,47 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         This method can return null if there is no system wallpaper available, if wallpapers are not
         supported in the current user, or if the calling app is not permitted to access the system
         wallpaper.*/
-        drawable = wallpaperManager.getDrawable();
-        if(drawable == null) {
-            Log.d("Wallpaper : ", "Drawable = null");
-
-        }
-
-        /*imposta il wallpaper corrente come contenuto di questa ImageView*/
-        imageView.setImageDrawable(drawable);
-
+        int statoPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.BIND_WALLPAPER);
+        Log.d("Wallpaper : ", String.valueOf(statoPermission));
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.BIND_WALLPAPER}, ID_RICHIESTA_PERMISSION);
 
     }
+
+        @Override
+        public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
+        {
+            Log.d("requestcode : ",String.valueOf(requestCode));
+            switch (requestCode) {
+                case 0:
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        drawable = wallpaperManager.getDrawable();
+                        if (drawable == null) {
+                            Log.d("Wallpaper : ", "Drawable = null");
+                        }
+                        imageView.setImageDrawable(drawable);
+                            // permission concessa: eseguiamo il codice
+                    }
+                    else {
+                        Log.d("wallpaper : ", "non consentito");
+                        return;
+                        // permission negata: provvediamo in qualche maniera
+                    }
+
+                }
+            }
+
+        //drawable = wallpaperManager.getDrawable();
+        //if (drawable == null) {
+            //Log.d("Wallpaper : ", "Drawable = null");
+
+        //}
+
+        /*imposta il wallpaper corrente come contenuto di questa ImageView*/
+        //imageView.setImageDrawable(drawable);
+
+    //}
+
 
 
 

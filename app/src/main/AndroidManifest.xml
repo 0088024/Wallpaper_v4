@@ -6,9 +6,7 @@
     <!-- Allows applications to set the wallpaper.   Added in API level 1.
          Protection level: normal -->
     <uses-permission android:name="android.permission.SET_WALLPAPER"></uses-permission>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
-
-
+    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission> -->
 
 
     <application
