@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             /* Allora informa l'utente che non può cambiare lo sfondo */
             DialogNoPermission mydialog = new DialogNoPermission();
             mydialog.show(getSupportFragmentManager(), "mydialog");
-        }else {
+        }else { /* Puoi impostare lo sfondo selezionato */
             try {
                 wallpaperManager.setResource((int) imageAdapter.getItemId(position));
             } catch (IOException e) {
