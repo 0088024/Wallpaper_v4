@@ -150,6 +150,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     /*permission accettata: possiamo attivare il codice*/
+                    /* Dopo la prima volta che viene accettata non verrà più mostrata la finestra
+                    all'utente a meno che non rimuove a mano la permission dalle impostazioni dell'emulatore o
+                    del dispositivo mobile.
+                     */
                     Log.d("Wallpaper :", "Permission accettata");
                     updateWallpaper();
 
@@ -174,7 +178,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         imageView.setImageResource((int)imageAdapter.getItemId(position));
 
-        /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi */
+        /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
+         * verrà avvisato che non lo può fare.*/
         if (STATO_PERMISSION!=0){
             /* Allora informa l'utente che non può cambiare lo sfondo */
             DialogNoPermission mydialog = new DialogNoPermission();
