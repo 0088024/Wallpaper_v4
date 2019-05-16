@@ -114,6 +114,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
 
 
+
+
+        /*Returns the desired minimum height for the wallpaper. Callers of
+        setBitmap(android.graphics.Bitmap) or setStream(java.io.InputStream) should check this
+        value beforehand to make sure the supplied wallpaper respects the desired minimum height.
+        If the returned value is <= 0, the caller should use the height of the default display
+        instead.
+        Return: The desired minimum height for the wallpaper. This value should be honored by
+        applications that set the wallpaper but it is not mandatory/obbligtorio.*/
+        int altezza = wallpaperManager.getDesiredMinimumHeight();
+        int larghezza = wallpaperManager.getDesiredMinimumWidth();
+        Log.d("Wallpaper : ", "Desiderata minima altezza/larghezza = " +
+                String.valueOf(altezza) + "/" + String.valueOf(larghezza)) ;
+
         /*Retrieve the current system wallpaper; if no wallpaper is set, the system built-in
         (incorporato) static wallpaper is returned. This is returned as an abstract Drawable that
         you can install in a View to display whatever/qualsiasi wallpaper the user has currently
@@ -124,11 +138,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         supported in the current user, or if the calling app is not permitted to access the system
         wallpaper.*/
         drawable = wallpaperManager.getDrawable();
-        int altezza = wallpaperManager.getDesiredMinimumHeight();
-        int larghezza = wallpaperManager.getDesiredMinimumWidth();
-        Log.d("Wallpaper : ", "Desiderata minima altezza/larghezza = " +
-                String.valueOf(altezza) + String.valueOf(larghezza)) ;
-
         if(drawable == null) {
             Log.d("Wallpaper : ", "Drawable = null");
 
