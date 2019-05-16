@@ -84,7 +84,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         }
 
-        else Log.d("Wallpaper", "Permesso già concesso");
+        else{
+            Log.d("Wallpaper", "Permesso già concesso");
+            updateWallpaper();
+
+        }
 
         /*Tale codice verrà eseguito solo se ci troviamo in Android 6: in tutte le altre
         versioni la permission verrà considerata concessa.*/
