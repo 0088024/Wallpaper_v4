@@ -2,19 +2,27 @@ package com.example.wallpaper;
 
 import android.Manifest;
 import android.app.WallpaperManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -69,29 +77,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         REQUEST_ID);
 
             }
-            /*altrimenti viene proposto all'utente di accettare la permission*/
-            else {
-                /*Requests permissions to be granted to this application. These permissions must be
-                requested in your manifest, they should not be granted to your app, and they should
-                have protection level #PROTECTION_DANGEROUS dangerous
-                If your app does not have the requested permissions the user will be presented with
-                UI for accepting them. After the user has accepted or rejected the requested
-                permissions you will receive a callback reporting whether the permissions were
-                granted or not. Your activity has to implement
-                ActivityCompat.OnRequestPermissionsResultCallback and the results of permission
-                requests will be delivered to its
-                onRequestPermissionsResult(int, String[], int[]) method.*/
-                //Log.d("Wallpaper :", "requestPermission()");
-                //ActivityCompat.requestPermissions(this,
-                        //new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        //REQUEST_ID);
-            }
         }
 
         else{
             Log.d("Wallpaper", "Permesso già concesso");
             updateWallpaper();
-
         }
 
         /*Tale codice verrà eseguito solo se ci troviamo in Android 6: in tutte le altre
@@ -124,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         supported in the current user, or if the calling app is not permitted to access the system
         wallpaper.*/
         drawable = wallpaperManager.getDrawable();
+
         altezza = wallpaperManager.getDesiredMinimumHeight();
         larghezza = wallpaperManager.getDesiredMinimumWidth();
         Log.d("Wallpaper : ", "Desiderata minima altezza/larghezza = " +
@@ -136,8 +127,53 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         /*imposta il wallpaper corrente come contenuto di questa ImageView*/
         imageView.setImageDrawable(drawable);
-        
 
+    }
+
+
+
+
+
+    public static void setWallpaper(Context context, BitmapDrawable wallpaper) {
+        try {
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
+            if(wallpaper != null) {
+                Bitmap bmp = wallpaper.getBitmap();
+                DisplayMetrics metrics = new DisplayMetrics();
+                WindowManager windowManager = (WindowManager)
+                                            context.getSystemService(Context.WINDOW_SERVICE);
+                windowManager.getDefaultDisplay().getMetrics(metrics);
+                int height = metrics.heightPixels;
+                int width = metrics.widthPixels;
+                wallpaperManager.setWallpaperOffsetSteps(1, 1);
+                wallpaperManager.suggestDesiredDimensions(width, height);
+                Bitmap bitmap = centerCropWallpaper(context, bmp,
+                        Math.min(wallpaperManager.getDesiredMinimumWidth(),
+                                                     wallpaperManager.getDesiredMinimumHeight()));
+                wallpaperManager.setBitmap(bitmap);
+            } else {
+                Log.e("Wallpaper :", "wallpaper could not be set.");
+            }
+        } catch (Exception ex) {
+            Log.e("Wallpaper :", "error setting wallpaper. " + ex.getMessage(), ex);
+        }
+    }
+
+
+
+    private static Bitmap centerCropWallpaper(Context context, Bitmap wallpaper, int desiredHeight) {
+        float scale = (float) desiredHeight / wallpaper.getHeight();
+        int scaledWidth = (int) (scale * wallpaper.getWidth());
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int deviceWidth = metrics.widthPixels;
+        int imageCenterWidth = scaledWidth / 2;
+        int widthToCut = imageCenterWidth - deviceWidth / 2;
+        int leftWidth = scaledWidth - widthToCut;
+        Bitmap scaledWallpaper = Bitmap.createScaledBitmap(wallpaper, scaledWidth, desiredHeight,
+                false);
+        return Bitmap.createBitmap(scaledWallpaper, widthToCut, 0, leftWidth, desiredHeight);
 
     }
 
@@ -152,9 +188,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     /*permission accettata: possiamo attivare il codice*/
                     /* Dopo la prima volta che viene accettata non verrà più mostrata la finestra
-                    all'utente a meno che non si rimuove a mano la permission dalle impostazioni dell'emulatore o
-                    del dispositivo mobile.
-                     */
+                    all'utente a meno che non si rimuove a mano la permission dalle impostazioni
+                    dell'emulatore o del dispositivo mobile.*/
                     Log.d("Wallpaper :", "Permission accettata");
                     updateWallpaper();
 
@@ -179,6 +214,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         imageView.setImageResource((int)imageAdapter.getItemId(position));
 
+        int idElemento = (int) imageAdapter.getItemId(position);
+
+        InputStream inputStream = getResources().openRawResource(idElemento);
+        Drawable drawable = Drawable.createFromStream(inputStream,"src");
+
         /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
          * verrà avvisato che non lo può fare. Quindi continuerà a vedere solo e soltanto
          * l'ultimo sfondo impostato precedentemente */
@@ -186,15 +226,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             /* Allora informa l'utente che non può cambiare lo sfondo */
             DialogNoPermission mydialog = new DialogNoPermission();
             mydialog.show(getSupportFragmentManager(), "mydialog");
-        }else {
+        }
+        else {
             /* Puoi impostare lo sfondo selezionato */
-            try {
-                wallpaperManager.setResource((int) imageAdapter.getItemId(position));
-            } catch (IOException e) {
+            setWallpaper(this, (BitmapDrawable)drawable);
+
+           /* try {
+                /*wallpaperManager.setResource(idElemento);*/
+          /*  }
+            catch (IOException e) {
                 e.printStackTrace();
                 Log.d("Wallpaper : ", "Errore in WallpaperManager.setResource()");
 
-            }
+            }*/
         }
     }
 

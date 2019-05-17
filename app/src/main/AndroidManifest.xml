@@ -7,6 +7,8 @@
          Protection level: normal -->
     <uses-permission android:name="android.permission.SET_WALLPAPER"></uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS"></uses-permission>
+
 
     <application
 
