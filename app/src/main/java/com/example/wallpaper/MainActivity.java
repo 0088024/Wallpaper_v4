@@ -3,6 +3,7 @@ package com.example.wallpaper;
 import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -50,6 +52,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         gridView.setAdapter(imageAdapter);
         gridView.setOnItemClickListener(this);
 
+
+        Button bottone_impostazioni = (Button) findViewById(R.id.bottone_impostazioni);
+        bottone_impostazioni.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS),
+                        0);
+            }
+        });
 
         /*int checkSelfPermission (Context context, String permission).
         Determina se ti è stata concessa una particolare autorizzazione.
@@ -230,15 +242,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         else {
             /* Puoi impostare lo sfondo selezionato */
             setWallpaper(this, (BitmapDrawable)drawable);
-
-           /* try {
-                /*wallpaperManager.setResource(idElemento);*/
-          /*  }
-            catch (IOException e) {
-                e.printStackTrace();
-                Log.d("Wallpaper : ", "Errore in WallpaperManager.setResource()");
-
-            }*/
         }
     }
 

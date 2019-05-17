@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Wallpaper</string>
     <string name="seleiona_wallpaper">SELECT WALLPAPER</string>
+    <string name="bottone_impostazioni">SYSTEM SETTING</string>
 </resources>
