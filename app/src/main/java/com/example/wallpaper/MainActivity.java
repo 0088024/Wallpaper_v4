@@ -243,7 +243,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         else {
             /* Puoi impostare lo sfondo selezionato */
-            setWallpaper(this, (BitmapDrawable)drawable);
+            /*setWallpaper(this, (BitmapDrawable)drawable);*/
+            try {
+                wallpaperManager.setResource(idElemento);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d("Wallpaper : ", "Eccezione in setResourse()");
+
+            }
             Toast.makeText(this, "Wallpaper set successfully",
                     Toast.LENGTH_LONG).show();
         }
