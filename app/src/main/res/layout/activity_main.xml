@@ -17,7 +17,7 @@
         android:columnWidth="100dp"
         android:numColumns="auto_fit"
         android:stretchMode="spacingWidthUniform"
-        android:verticalSpacing="1dp"
+        android:verticalSpacing="10dp"
         app:layout_constraintBottom_toTopOf="@+id/bottone_impostazioni"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
