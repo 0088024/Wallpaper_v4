@@ -4,13 +4,17 @@ import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -146,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         /*imposta il wallpaper corrente come contenuto di questa ImageView*/
         imageView.setImageDrawable(drawable);
 
-
     }
 
 
@@ -185,11 +188,53 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         try {
             wallpaperManager.setResource((int)imageAdapter.getItemId(position));
+
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("Wallpaper : ", "Errore in WallpaperManager.setResource()");
 
         }
     }
+
+
+
+
+    public static void setWallpaper(Context context, BitmapDrawable wallpaper) {
+        try {
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
+            if(wallpaper != null) {
+                Bitmap bmp = wallpaper.getBitmap();
+                DisplayMetrics metrics = new DisplayMetrics();
+                WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+                windowManager.getDefaultDisplay().getMetrics(metrics);
+                int height = metrics.heightPixels;
+                int width = metrics.widthPixels;
+                wallpaperManager.setWallpaperOffsetSteps(1, 1);
+                wallpaperManager.suggestDesiredDimensions(width, height);
+                Bitmap bitmap = centerCropWallpaper(context, bmp, Math.min(wallpaperManager.getDesiredMinimumWidth(), wallpaperManager.getDesiredMinimumHeight()));
+                wallpaperManager.setBitmap(bitmap);
+            } else {
+                Log.e("Wallpaper :", "wallpaper could not be set.");
+            }
+        } catch (Exception ex) {
+            Log.e("Wallpaper :", "error setting wallpaper. " + ex.getMessage(), ex);
+        }
+    }
+
+
+    private static Bitmap centerCropWallpaper(Context context, Bitmap wallpaper, int desiredHeight){
+        float scale = (float) desiredHeight / wallpaper.getHeight();
+        int scaledWidth = (int) (scale * wallpaper.getWidth());
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int deviceWidth = metrics.widthPixels;
+        int imageCenterWidth = scaledWidth /2;
+        int widthToCut = imageCenterWidth - deviceWidth / 2;
+        int leftWidth = scaledWidth - widthToCut;
+        Bitmap scaledWallpaper = Bitmap.createScaledBitmap(wallpaper, scaledWidth, desiredHeight, false);
+        return Bitmap.createBitmap(scaledWallpaper, widthToCut, 0, leftWidth, desiredHeight);
+    }
+
 
 }

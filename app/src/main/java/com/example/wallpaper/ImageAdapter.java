@@ -13,7 +13,7 @@ public class ImageAdapter extends BaseAdapter {
     private Context context;
 
     private Integer[] array_idSfondi = {R.raw.lloyd_thumbs, R.raw.android_wallpaper,
-                                        R.raw.images, R.raw.};
+                                        R.raw.images, R.raw.lloyd_thumbs2, R.raw.balloons};
 
 
 
