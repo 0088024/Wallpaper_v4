@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         Math.min(wallpaperManager.getDesiredMinimumWidth(),
                                                      wallpaperManager.getDesiredMinimumHeight()));
                 wallpaperManager.setBitmap(bitmap);
+
             } else {
                 Log.e("Wallpaper :", "wallpaper could not be set.");
             }
@@ -242,6 +244,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         else {
             /* Puoi impostare lo sfondo selezionato */
             setWallpaper(this, (BitmapDrawable)drawable);
+            Toast.makeText(this, "Wallpaper set successfully",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
