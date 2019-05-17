@@ -2,7 +2,6 @@ package com.example.wallpaper;
 
 import android.Manifest;
 import android.app.WallpaperManager;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
@@ -180,7 +179,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         imageView.setImageResource((int)imageAdapter.getItemId(position));
 
-
         /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
          * verrà avvisato che non lo può fare. Quindi continuerà a vedere solo e soltanto
          * l'ultimo sfondo impostato precedentemente */
@@ -192,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             /* Puoi impostare lo sfondo selezionato */
             try {
                 wallpaperManager.setResource((int) imageAdapter.getItemId(position));
-
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d("Wallpaper : ", "Errore in WallpaperManager.setResource()");
