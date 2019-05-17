@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wallpaper</string>
+    <string name="seleiona_wallpaper">SELECT WALLPAPER</string>
 </resources>
