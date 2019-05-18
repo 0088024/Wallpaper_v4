@@ -11,7 +11,7 @@ public class ImageAdapter extends BaseAdapter {
 
     private Context context;
 
-    private Integer[] array_idSfondi = { R.raw.neve,  R.raw.wallpapers_21};
+    private Integer[] array_idSfondi = { R.raw.neve,  R.raw.spiaggia, R.raw.wallpapers_21};
 
 
 
@@ -19,10 +19,13 @@ public class ImageAdapter extends BaseAdapter {
         this.context = context;
     }
 
+
     @Override
     public int getCount() {
         return array_idSfondi.length;
     }
+
+
 
 
 
