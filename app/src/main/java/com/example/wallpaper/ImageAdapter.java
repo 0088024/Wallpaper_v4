@@ -11,7 +11,7 @@ public class ImageAdapter extends BaseAdapter {
 
     private Context context;
 
-    private Integer[] array_idSfondi = {R.raw.balloons, R.raw.neve, R.raw.wallpapers_21};
+    private Integer[] array_idSfondi = {R.raw.balloons, R.raw.wallpapers_21};
 
 
 
