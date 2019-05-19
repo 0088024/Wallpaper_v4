@@ -179,10 +179,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Log.d("Wallpaper : ", "posizione cliccata" + position);
 
-        /*imageView.setImageBitmap((int)imageAdapter.getItemId(position));*/
-        imageView.setImageBitmap((Bitmap)imageAdapter.getItem(position));
-
-        Bitmap bitmap = (Bitmap) imageAdapter.getItem(position);
+        /*imageView.setImageResource((int)imageAdapter.getItemId(position));*/
+        InputStream inputStream =
+                    getResources().openRawResource((int)imageAdapter.getItemId(position));
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        imageView.setImageBitmap(bitmap);
 
         /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
          * verrà avvisato che non lo può fare. Quindi continuerà a vedere solo e soltanto
@@ -194,7 +195,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         else {
             /* Puoi impostare lo sfondo selezionato */
-            /*setWallpaper(this, (BitmapDrawable)drawable);*/
             try {
                 wallpaperManager.setBitmap(bitmap);
             } catch (IOException e) {
