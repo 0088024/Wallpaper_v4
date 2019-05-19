@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
         imageView.setImageBitmap(bitmap);
 
+
         /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
          * verrà avvisato che non lo può fare. Quindi continuerà a vedere solo e soltanto
          * l'ultimo sfondo impostato precedentemente */
