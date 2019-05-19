@@ -146,53 +146,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
-
-    public static void setWallpaper(Context context, BitmapDrawable wallpaper) {
-        try {
-            WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
-            if(wallpaper != null) {
-                Bitmap bmp = wallpaper.getBitmap();
-                DisplayMetrics metrics = new DisplayMetrics();
-                WindowManager windowManager = (WindowManager)
-                                            context.getSystemService(Context.WINDOW_SERVICE);
-                windowManager.getDefaultDisplay().getMetrics(metrics);
-                int height = metrics.heightPixels;
-                int width = metrics.widthPixels;
-                wallpaperManager.setWallpaperOffsetSteps(1, 1);
-                wallpaperManager.suggestDesiredDimensions(width, height);
-                Bitmap bitmap = centerCropWallpaper(context, bmp,
-                        Math.min(wallpaperManager.getDesiredMinimumWidth(),
-                                                     wallpaperManager.getDesiredMinimumHeight()));
-                wallpaperManager.setBitmap(bitmap);
-
-            } else {
-                Log.e("Wallpaper :", "wallpaper could not be set.");
-            }
-        } catch (Exception ex) {
-            Log.e("Wallpaper :", "error setting wallpaper. " + ex.getMessage(), ex);
-        }
-    }
-
-
-
-    private static Bitmap centerCropWallpaper(Context context, Bitmap wallpaper, int desiredHeight) {
-        float scale = (float) desiredHeight / wallpaper.getHeight();
-        int scaledWidth = (int) (scale * wallpaper.getWidth());
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        int deviceWidth = metrics.widthPixels;
-        int imageCenterWidth = scaledWidth / 2;
-        int widthToCut = imageCenterWidth - deviceWidth / 2;
-        int leftWidth = scaledWidth - widthToCut;
-        Bitmap scaledWallpaper = Bitmap.createScaledBitmap(wallpaper, scaledWidth, desiredHeight,
-                false);
-        return Bitmap.createBitmap(scaledWallpaper, widthToCut, 0, leftWidth, desiredHeight);
-
-    }
-
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[],
                                            int[] grantResults) {
@@ -226,12 +179,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Log.d("Wallpaper : ", "posizione cliccata" + position);
 
-        imageView.setImageResource((int)imageAdapter.getItemId(position));
+        /*imageView.setImageBitmap((int)imageAdapter.getItemId(position));*/
+        imageView.setImageBitmap((Bitmap)imageAdapter.getItem(position));
 
-        int idElemento = (int) imageAdapter.getItemId(position);
-
-        InputStream inputStream = getResources().openRawResource(idElemento);
-        Drawable drawable = Drawable.createFromStream(inputStream,"src");
+        Bitmap bitmap = (Bitmap) imageAdapter.getItem(position);
 
         /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
          * verrà avvisato che non lo può fare. Quindi continuerà a vedere solo e soltanto
@@ -245,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             /* Puoi impostare lo sfondo selezionato */
             /*setWallpaper(this, (BitmapDrawable)drawable);*/
             try {
-                wallpaperManager.setResource(idElemento);
+                wallpaperManager.setBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d("Wallpaper : ", "Eccezione in setResourse()");
