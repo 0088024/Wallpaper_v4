@@ -167,10 +167,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Log.d("Wallpaper :", "Permission negata");
                 }
             }
-
         }
     }
-
 
 
 
