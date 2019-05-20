@@ -17,10 +17,12 @@ public class ImageAdapter extends BaseAdapter {
     private Context context;
 
     private Integer[] array_idSfondi = { R.raw.neve, R.raw.alberi, R.raw.foglie, };
+    private ArrayList<Bitmap> array_bitmap;
 
 
-    public ImageAdapter(Context context){
+    public ImageAdapter(Context context, ArrayList<Bitmap> array_bitmap){
         this.context = context;
+        this.array_bitmap = array_bitmap;
     }
 
 
@@ -54,9 +56,7 @@ public class ImageAdapter extends BaseAdapter {
         }
         else imageView = (ImageView) convertView;
 
-        InputStream inputStream = context.getResources().openRawResource(array_idSfondi[position]);
-        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-        imageView.setImageBitmap(bitmap);
+        imageView.setImageBitmap(array_bitmap.get(position));
         return imageView;
     }
 }

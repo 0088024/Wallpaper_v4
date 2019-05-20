@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,10 +23,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private WallpaperManager wallpaperManager;
     private Drawable drawable;
     private ImageAdapter imageAdapter;
+    private ProgressBar progressBar;
+
 
     public final int REQUEST_ID = 100;
     private int STATO_PERMISSION = 0;
@@ -48,11 +53,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         gridView = findViewById(R.id.gridView);
         imageView = findViewById(R.id.imageView);
+        progressBar = findViewById(R.id.progressBar);
 
-        imageAdapter = new ImageAdapter(this);
-        gridView.setAdapter(imageAdapter);
-        gridView.setOnItemClickListener(this);
-
+        new CaricaImmaginiTask(this).execute();
 
         Button bottone_impostazioni = (Button) findViewById(R.id.bottone_impostazioni);
         bottone_impostazioni.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         0);
             }
         });
+
+        gridView.setOnItemClickListener(this);
 
         /*int checkSelfPermission (Context context, String permission).
         Determina se ti è stata concessa una particolare autorizzazione.
@@ -205,5 +210,62 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Toast.LENGTH_LONG).show();
         }
     }
+
+
+
+
+    /*thread che in background salva i dati nel database locale*/
+    private class CaricaImmaginiTask extends AsyncTask< Void, Integer, ArrayList<Bitmap>> {
+
+        private Context context;
+        private int count = 1;
+
+        private Integer[] array_idSfondi = { R.raw.neve, R.raw.alberi, R.raw.foglie, };
+        private final int NUM_IMMAGINI = 3;
+
+        public CaricaImmaginiTask(Context context) {
+
+            this.context = context;
+        }
+
+
+        @Override
+        protected ArrayList<Bitmap> doInBackground(Void... voids) {
+
+            ArrayList<Bitmap> array_bitmap = new ArrayList<Bitmap>();
+
+            for(int i=0; i<NUM_IMMAGINI; i++){
+                InputStream inputStream =
+                        context.getResources().openRawResource(array_idSfondi[i]);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                array_bitmap.add(bitmap);
+                Log.d("Wallpaper : ", "Size array_bitmap = " +
+                                            String.valueOf(array_bitmap.size()));
+                Log.d("Wallpaper : ", bitmap.toString());
+            }
+
+            return array_bitmap;
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            getProgressBar().setVisibility(ProgressBar.VISIBLE);
+        }
+
+
+        @Override
+        protected void onPostExecute(ArrayList<Bitmap> risultato) {
+            Log.d("Wallpaper :", String.valueOf(risultato.size()));
+            getProgressBar().setVisibility(View.GONE);
+            imageAdapter = new ImageAdapter(context, risultato);
+            gridView.setAdapter(imageAdapter);
+        }
+
+    }
+
+
+    public ProgressBar getProgressBar() { return progressBar; }
+
 
 }
