@@ -35,7 +35,7 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return array_bitmap.get(position);
     }
 
 

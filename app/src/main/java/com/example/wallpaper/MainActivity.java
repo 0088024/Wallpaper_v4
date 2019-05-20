@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         InputStream inputStream =
                     getResources().openRawResource((int)imageAdapter.getItemId(position));
         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-        imageView.setImageBitmap(bitmap);
+        imageView.setImageBitmap((Bitmap)imageAdapter.getItem(position));
 
 
         /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
