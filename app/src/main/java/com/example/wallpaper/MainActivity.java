@@ -182,11 +182,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Log.d("Wallpaper : ", "posizione cliccata" + position);
 
-        /*imageView.setImageResource((int)imageAdapter.getItemId(position));*/
-        InputStream inputStream =
-                    getResources().openRawResource((int)imageAdapter.getItemId(position));
-        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-        imageView.setImageBitmap((Bitmap)imageAdapter.getItem(position));
+        Bitmap bitmap = (Bitmap)imageAdapter.getItem(position);
+
+        imageView.setImageBitmap(bitmap);
 
 
         /* Se l'utente non si ricorda di aver negato l'autorizzazione e prova ad impostare uno degli sfondi
